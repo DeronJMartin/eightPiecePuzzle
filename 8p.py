@@ -1,3 +1,6 @@
+# Import packages
+import sys
+
 # Define uniform cost distance which is always zero
 class uniformCostDist:
     def distance(self, puzzleSize, puzzleState, goalState):
@@ -45,13 +48,12 @@ class manhattanTileDistance:
         return distance
 
 # Define driver function
-def driver(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]]):
+def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]]):
     
     # Detect errors in input
     # Detect error in puzzle size
     if (puzzleSize not in [2,3,4]):
-        print("This can only solve for 3-piece, 8-piece, or 15-piece puzzles!")
-        return -1
+        sys.exit("This can only solve for 3-piece, 8-piece, or 15-piece puzzles!")
 
     # Detect error in puzzle pieces
     puzzlePieces = set()
@@ -60,8 +62,7 @@ def driver(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
             puzzlePieces.add(j)
     correctPuzzlePieces = {range(puzzleSize * puzzleSize - 1)}
     if (puzzlePieces != correctPuzzlePieces):
-        print("Error! Incorrect input for puzzle state!")
-        return -1
+        sys.exit("Error! Incorrect input for puzzle state!")
 
     # Detect error in goal pieces
     goalPieces = set()
@@ -70,10 +71,11 @@ def driver(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
             goalPieces.add(j)
     correctGoalPieces = {range(puzzleSize * puzzleSize - 1)}
     if (goalPieces != correctGoalPieces):
-        print("Error! Incorrect input for goal state!")
-        return -1
+        sys.exit("Error! Incorrect input for goal state!")
+
+    # Initialize queue
+    nodes = []
 
 
 if __name__ == "__main__":
-    a = uniformCostDist()
-    print(a.distance())
+    print("test")

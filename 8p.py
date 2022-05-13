@@ -41,24 +41,27 @@ def driver(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
     # Detect error in puzzle size
     if (puzzleSize not in [2,3,4]):
         print("This can only solve for 3-piece, 8-piece, or 15-piece puzzles!")
+        return -1
 
     # Detect error in puzzle pieces
     puzzlePieces = set()
     for i in puzzleState:
         for j in i:
             puzzlePieces.add(j)
-    correctPuzzlePieces = {0, 1, 2, 3, 4, 5, 6, 7, 8}
+    correctPuzzlePieces = {range(puzzleSize * puzzleSize - 1)}
     if (puzzlePieces != correctPuzzlePieces):
         print("Error! Incorrect input for puzzle state!")
+        return -1
 
     # Detect error in goal pieces
     goalPieces = set()
     for i in goalState:
         for j in i:
             goalPieces.add(j)
-    correctGoalPieces = {0, 1, 2, 3, 4, 5, 6, 7, 8}
+    correctGoalPieces = {range(puzzleSize * puzzleSize - 1)}
     if (goalPieces != correctGoalPieces):
         print("Error! Incorrect input for goal state!")
+        return -1
 
 
 if __name__ == "__main__":

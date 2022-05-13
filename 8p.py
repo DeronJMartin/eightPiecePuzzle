@@ -115,7 +115,7 @@ def goalTest(node, goalState):
 def printState(node):
     puzzleState = node[0]
     for i in puzzleState:
-        print(puzzleState)
+        print(i)
     print("\n")
 
 # Define OPERATORS

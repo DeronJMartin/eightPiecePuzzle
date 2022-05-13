@@ -12,9 +12,15 @@ def misplacedTileDist(puzzleSize, puzzleState, goalState):
 
     return distance
 
-# Define the general manhattan distance function for this type of puzzle
+# Define the generalized manhattan distance function for this type of puzzle
 def manhattanTileDistance(puzzleSize, puzzleState, goalState):
     distance = 0
+
+    """
+    I didn't bother figuring out an algorithm with less
+    time complexity for generalizing manhattan distance
+    Its still pretty low for puzzle size 2,3,4
+    """
 
     # Iterate through each piece of the goal state
     for i in range(puzzleSize):
@@ -23,5 +29,8 @@ def manhattanTileDistance(puzzleSize, puzzleState, goalState):
             # Iterate through each piece of the current puzzle state
             for ii in range(puzzleSize):
                 for jj in range(puzzleSize):
+
+                    # Increment distance by distance of puzzle piece to goal piece
                     if (goalState[i][j] == puzzleState[ii][jj]):
                         distance += (abs(i - ii) + abs(j - jj))
+

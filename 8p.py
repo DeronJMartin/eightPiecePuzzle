@@ -120,37 +120,65 @@ def printState(node):
 
 # Define OPERATORS
 # The operatots are swapUp, swapRight, swapDown, swapLeft
-def swapUp(puzzleSize, puzzleState):
+def swapUp(puzzleSize, node):
+    pS = node[0]
+    puzzleState = []
     for i in range(puzzleSize):
+        puzzleState.append([])
         for j in range(puzzleSize):
-            if (puzzleState[i][j] == 0):
-                puzzleState[i][j] == puzzleState[i-1][j]
-                puzzleState[i-1][j] == 0
-    return puzzleState
+            puzzleState[i].append(pS[i][j])
 
-def swapRight(puzzleSize, puzzleState):
     for i in range(puzzleSize):
         for j in range(puzzleSize):
             if (puzzleState[i][j] == 0):
-                puzzleState[i][j] == puzzleState[i][j+1]
-                puzzleState[i][j+1] == 0
-    return puzzleState
+                puzzleState[i][j] = puzzleState[i-1][j]
+                puzzleState[i-1][j] = 0
+                return(puzzleState)
 
-def swapDown(puzzleSize, puzzleState):
+def swapRight(puzzleSize, node):
+    pS = node[0]
+    puzzleState = []
     for i in range(puzzleSize):
+        puzzleState.append([])
         for j in range(puzzleSize):
-            if (puzzleState[i][j] == 0):
-                puzzleState[i][j] == puzzleState[i+1][j]
-                puzzleState[i+1][j] == 0
-    return puzzleState
+            puzzleState[i].append(pS[i][j])
 
-def swapLeft(puzzleSize, puzzleState):
     for i in range(puzzleSize):
         for j in range(puzzleSize):
             if (puzzleState[i][j] == 0):
-                puzzleState[i][j] == puzzleState[i][j+1]
-                puzzleState[i][j+1] == 0
-    return puzzleState
+                puzzleState[i][j] = puzzleState[i][j+1]
+                puzzleState[i][j+1] = 0
+                return(puzzleState)
+
+def swapDown(puzzleSize, node):
+    pS = node[0]
+    puzzleState = []
+    for i in range(puzzleSize):
+        puzzleState.append([])
+        for j in range(puzzleSize):
+            puzzleState[i].append(pS[i][j])
+
+    for i in range(puzzleSize):
+        for j in range(puzzleSize):
+            if (puzzleState[i][j] == 0):
+                puzzleState[i][j] = puzzleState[i+1][j]
+                puzzleState[i+1][j] = 0
+                return(puzzleState)
+
+def swapLeft(puzzleSize, node):
+    pS = node[0]
+    puzzleState = []
+    for i in range(puzzleSize):
+        puzzleState.append([])
+        for j in range(puzzleSize):
+            puzzleState[i].append(pS[i][j])
+
+    for i in range(puzzleSize):
+        for j in range(puzzleSize):
+            if (puzzleState[i][j] == 0):
+                puzzleState[i][j] = puzzleState[i][j-1]
+                puzzleState[i][j-1] = 0
+                return(puzzleState)
 
 # Define EXPAND function
 def expandState(nodes, node):
@@ -177,13 +205,13 @@ def expandState(nodes, node):
 
     # Add operator puzzle states to queue
     if canSwapUp:
-        nodes.append(swapUp(puzzleSize, puzzleState))
+        nodes.append(swapUp(puzzleSize, node))
     if canSwapRight:
-        nodes.append(swapRight(puzzleSize, puzzleState))
+        nodes.append(swapRight(puzzleSize, node))
     if canSwapDown:
-        nodes.append(swapDown(puzzleSize, puzzleState))
+        nodes.append(swapDown(puzzleSize, node))
     if canSwapLeft:
-        nodes.append(swapLeft(puzzleSize, puzzleState))
+        nodes.append(swapLeft(puzzleSize, node))
 
     return nodes
 

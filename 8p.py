@@ -58,7 +58,9 @@ def inputErrorDetection(puzzleSize, puzzleState, goalState):
     for i in puzzleState:
         for j in i:
             puzzlePieces.add(j)
-    correctPuzzlePieces = {range(puzzleSize * puzzleSize - 1)}
+    correctPuzzlePieces = set()
+    for i in range(puzzleSize * puzzleSize):
+        correctPuzzlePieces.add(i)
     if (puzzlePieces != correctPuzzlePieces):
         sys.exit("Error! Incorrect input for puzzle state!")
 
@@ -67,7 +69,9 @@ def inputErrorDetection(puzzleSize, puzzleState, goalState):
     for i in goalState:
         for j in i:
             goalPieces.add(j)
-    correctGoalPieces = {range(puzzleSize * puzzleSize - 1)}
+    correctGoalPieces = set()
+    for i in range(puzzleSize * puzzleSize):
+        correctGoalPieces.add(i)
     if (goalPieces != correctGoalPieces):
         sys.exit("Error! Incorrect input for goal state!")
 
@@ -112,6 +116,7 @@ def printState(node):
     puzzleState = node[0]
     for i in puzzleState:
         print(puzzleState)
+    print("\n")
 
 # Define OPERATORS
 # The operatots are swapUp, swapRight, swapDown, swapLeft
@@ -183,7 +188,8 @@ def expandState(nodes, node):
     return nodes
 
 # Define driver function
-def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
+# Default puzzleState = [[4,8,1],[3,0,5],[7,6,2]]
+def search(puzzleSize = 3, puzzleState = [[1,2,3],[4,5,6],[7,0,8]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
     
     # Detect errors in input
     inputErrorDetection(puzzleSize, puzzleState, goalState)
@@ -220,7 +226,7 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
         printState(node)
 
         # Check for success
-        if (goalTest(node)):
+        if (goalTest(node, goalState)):
             print("Success! Goal State found!")
             break
 
@@ -228,4 +234,4 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
         nodes = makeQueue(expandState(nodes, node))
 
 if __name__ == "__main__":
-    print("test")
+    search()

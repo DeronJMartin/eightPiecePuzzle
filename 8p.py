@@ -10,3 +10,9 @@ def misplacedTileDist(puzzleSize, puzzleState, goalState):
                 distance += 1
 
     return distance
+import math
+import matplotlib.pyplot as plt
+
+def misplacedTileDist(puzzleSize, puzzleState, goalState):
+    n = puzzleSize
+    

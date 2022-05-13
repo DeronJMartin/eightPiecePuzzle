@@ -89,9 +89,29 @@ def makeQueue(nodes):
     nodes.sort(key = lambda x:x[1])
     return nodes
 
+# Define EMPTY function
+def empty(nodes):
+    if (len(nodes) == 0):
+        return True
+    else:
+        return False
+
 # Define REMOVE-FRONT function
 def removeFront(nodes):
     return nodes.pop(0)
+
+# Define GOAL-TEST
+def goalTest(node, goalState):
+    if (node[0] == goalState):
+        return True
+    else:
+        return False
+
+# Print puzzle state
+def printState(node):
+    puzzleState = node[0]
+    for i in puzzleState:
+        print(puzzleState)
 
 # Define driver function
 def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
@@ -122,12 +142,18 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
     while True:
 
         # Check for failure
-        if (len(nodes) == 0):
+        if (empty(nodes)):
             print("Failure! No solution found!")
             break
 
         # Remove frontier node
         node = removeFront(nodes)
+
+        # Check for success
+        if (goalTest(node)):
+            print("Success! Goal State found!")
+            printState(node)
+            break
 
 
 if __name__ == "__main__":

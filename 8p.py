@@ -71,14 +71,42 @@ def inputErrorDetection(puzzleSize, puzzleState, goalState):
     if (goalPieces != correctGoalPieces):
         sys.exit("Error! Incorrect input for goal state!")
 
+# Define MAKE-NODE function
+def makeNode(puzzleSize, puzzleState, goalState, cost, heuristic):
+    # Calculate heuristic value h(n)
+    distance = heuristic.distance(puzzleSize, puzzleState, goalState)
+
+    # Caculate f(n) = g(n) + f(n)
+    value = cost + distance
+
+    # Create node of state and f(n)
+    node = [puzzleState, value]
+    return node
+
 # Define driver function
-def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]]):
+def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
     
     # Detect errors in input
     inputErrorDetection(puzzleSize, puzzleState, goalState)
 
+    # Inititalize heuristic to be used
+    if (algorithm == 1):
+        heuristic = uniformCostDist()
+    elif (algorithm == 2):
+        heuristic = misplacedTileDist()
+    elif (algorithm == 3):
+        heuristic = manhattanTileDistance()
+    else:
+        sys.exit("Error! Incorrect input for algorithm selection!")
+
     # Initialize queue
     nodes = []
+
+    # Initialize tree depth
+    cost = 0
+
+    # Add initial state to queue
+    nodes.append(makeNode(puzzleSize, puzzleState, goalState, cost, heuristic))
 
 
 if __name__ == "__main__":

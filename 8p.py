@@ -47,10 +47,8 @@ class manhattanTileDistance:
         
         return distance
 
-# Define driver function
-def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]]):
-    
-    # Detect errors in input
+# Define input error detection function
+def inputErrorDetection(puzzleSize, puzzleState, goalState):
     # Detect error in puzzle size
     if (puzzleSize not in [2,3,4]):
         sys.exit("This can only solve for 3-piece, 8-piece, or 15-piece puzzles!")
@@ -72,6 +70,12 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
     correctGoalPieces = {range(puzzleSize * puzzleSize - 1)}
     if (goalPieces != correctGoalPieces):
         sys.exit("Error! Incorrect input for goal state!")
+
+# Define driver function
+def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]]):
+    
+    # Detect errors in input
+    inputErrorDetection(puzzleSize, puzzleState, goalState)
 
     # Initialize queue
     nodes = []

@@ -83,6 +83,12 @@ def makeNode(puzzleSize, puzzleState, goalState, cost, heuristic):
     node = [puzzleState, value]
     return node
 
+# Define MAKE-QUEUE function
+def makeQueue(nodes):
+    # Sort nodes by non-decreasing f(n)
+    nodes.sort(key = lambda x:x[1])
+    return nodes
+
 # Define driver function
 def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
     
@@ -115,6 +121,9 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
         if (len(nodes) == 0):
             print("Failure! No solution found!")
             break
+
+        # REMOVE-FRONT
+        node = nodes.pop(0)
 
 
 if __name__ == "__main__":

@@ -16,7 +16,7 @@ class misplacedTileDist:
             for j in range(puzzleSize):
 
                 # Increment distance if they are not the same
-                if (goalState[i][j] != puzzleState[i][j]):
+                if (goalState[i][j] != puzzleState[i][j] and goalState[i][j] != 0):
                     distance += 1
 
         return distance
@@ -42,7 +42,7 @@ class manhattanTileDistance:
                     for jj in range(puzzleSize):
 
                         # Increment distance by distance of puzzle piece to goal piece
-                        if (goalState[i][j] == puzzleState[ii][jj]):
+                        if (goalState[i][j] == puzzleState[ii][jj] and goalState[i][j] != 0):
                             distance += (abs(i - ii) + abs(j - jj))
         
         return distance
@@ -116,7 +116,6 @@ def printState(node):
     puzzleState = node[0]
     for i in puzzleState:
         print(i)
-    print("\n")
 
 # Define OPERATORS
 # The operatots are swapUp, swapRight, swapDown, swapLeft
@@ -181,7 +180,7 @@ def swapLeft(puzzleSize, node):
                 return(puzzleState)
 
 # Define EXPAND function
-def expandState(nodes, node):
+def expandState(nodes, node, goalState, heuristic):
     # Calculate puzzle size from puzzle state
     puzzleState = node[0]
     puzzleSize = len(puzzleState[0])
@@ -205,19 +204,19 @@ def expandState(nodes, node):
 
     # Add operator puzzle states to queue
     if canSwapUp:
-        nodes.append(swapUp(puzzleSize, node))
+        nodes.append(makeNode(puzzleSize, swapUp(puzzleSize, node), goalState, node[1] - heuristic.distance(puzzleSize, puzzleState, goalState) + 1, heuristic))
     if canSwapRight:
-        nodes.append(swapRight(puzzleSize, node))
+        nodes.append(makeNode(puzzleSize, swapRight(puzzleSize, node), goalState, node[1] - heuristic.distance(puzzleSize, puzzleState, goalState) + 1, heuristic))
     if canSwapDown:
-        nodes.append(swapDown(puzzleSize, node))
+        nodes.append(makeNode(puzzleSize, swapDown(puzzleSize, node), goalState, node[1] - heuristic.distance(puzzleSize, puzzleState, goalState) + 1, heuristic))
     if canSwapLeft:
-        nodes.append(swapLeft(puzzleSize, node))
+        nodes.append(makeNode(puzzleSize, swapLeft(puzzleSize, node), goalState, node[1] - heuristic.distance(puzzleSize, puzzleState, goalState) + 1, heuristic))
 
     return nodes
 
 # Define driver function
 # Default puzzleState = [[4,8,1],[3,0,5],[7,6,2]]
-def search(puzzleSize = 3, puzzleState = [[1,2,3],[4,5,6],[7,0,8]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
+def search(puzzleSize = 4, puzzleState = [[0,9,2,11],[10,1,5,7],[6,4,13,14],[12,15,8,3]], goalState = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]], algorithm = 3):
     
     # Detect errors in input
     inputErrorDetection(puzzleSize, puzzleState, goalState)
@@ -252,6 +251,7 @@ def search(puzzleSize = 3, puzzleState = [[1,2,3],[4,5,6],[7,0,8]], goalState = 
         # Remove frontier node and print it
         node = removeFront(nodes)
         printState(node)
+        print("f(n) = ",node[1],"\n")
 
         # Check for success
         if (goalTest(node, goalState)):
@@ -259,7 +259,7 @@ def search(puzzleSize = 3, puzzleState = [[1,2,3],[4,5,6],[7,0,8]], goalState = 
             break
 
         # Expand operators and add new states to queue
-        nodes = makeQueue(expandState(nodes, node))
+        nodes = makeQueue(expandState(nodes, node, goalState, heuristic))
 
 if __name__ == "__main__":
     search()

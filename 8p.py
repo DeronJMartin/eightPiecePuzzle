@@ -163,15 +163,15 @@ def expandState(nodes, node):
 
     # Find blank piece position
     for i in range(puzzleSize):
-        for j in range(puzzleState):
+        for j in range(puzzleSize):
             if (puzzleState[i][j] == 0):
                 if (i == 0):
                     canSwapUp = False
-                elif (i == puzzleState-1):
+                elif (i == puzzleSize-1):
                     canSwapDown = False
                 if (j == 0):
                     canSwapLeft = False
-                elif (j == puzzleState-1):
+                elif (j == puzzleSize-1):
                     canSwapRight = False
                 break
 

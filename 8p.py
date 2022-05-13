@@ -1,30 +1,25 @@
+# Define uniform cost distance which is always zero
+class uniformCostDist:
+    def distance(self, puzzleSize, puzzleState, goalState):
+        return 0
+
 # Define the distance class for the misplaced tile heuristic
 class misplacedTileDist:
-    def __init__(self, puzzleSize, puzzleState, goalState):
-        self.puzzleSize = puzzleSize
-        self.puzzleState = puzzleState
-        self.goalState = goalState
-
-    # Define the distance function
-    def distance(self):
+    def distance(self, puzzleSize, puzzleState, goalState):
         distance = 0
 
         # Iterate through each piece of the current puzzle state and goal state and compare them
-        for i in range(self.puzzleSize):
-            for j in range(self.puzzleSize):
+        for i in range(puzzleSize):
+            for j in range(puzzleSize):
 
                 # Increment distance if they are not the same
-                if (self.goalState[i][j] != self.puzzleState[i][j]):
-                    self.distance += 1
+                if (goalState[i][j] != puzzleState[i][j]):
+                    distance += 1
 
         return distance
 
 # Define the generalized manhattan distance class for this type of puzzle
 class manhattanTileDistance:
-    def __init__(self, puzzleSize, puzzleState, goalState):
-        self.puzzleSize = puzzleSize
-        self.puzzleState = puzzleState
-        self.goalState = goalState
 
     """
     I didn't bother figuring out an algorithm with less
@@ -32,19 +27,19 @@ class manhattanTileDistance:
     as its still pretty low for puzzle size 2,3,4
     """
 
-    def distance(self):
+    def distance(self, puzzleSize, puzzleState, goalState):
         distance = 0
 
         # Iterate through each piece of the goal state
-        for i in range(self.puzzleSize):
-            for j in range(self.puzzleSize):
+        for i in range(puzzleSize):
+            for j in range(puzzleSize):
 
                 # Iterate through each piece of the current puzzle state
-                for ii in range(self.puzzleSize):
-                    for jj in range(self.puzzleSize):
+                for ii in range(puzzleSize):
+                    for jj in range(puzzleSize):
 
                         # Increment distance by distance of puzzle piece to goal piece
-                        if (self.goalState[i][j] == self.puzzleState[ii][jj]):
+                        if (goalState[i][j] == puzzleState[ii][jj]):
                             distance += (abs(i - ii) + abs(j - jj))
         
         return distance
@@ -80,4 +75,5 @@ def driver(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
 
 
 if __name__ == "__main__":
-    print("Test")
+    a = uniformCostDist()
+    print(a.distance())

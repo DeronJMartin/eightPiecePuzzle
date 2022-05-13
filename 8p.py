@@ -26,8 +26,8 @@ class manhattanTileDistance:
 
     """
     I didn't bother figuring out an algorithm with less
-    time complexity than O(n^^4) for generalizing manhattan distance
-    as its still pretty low for puzzle size 2,3,4
+    time complexity than O(n^^4) for generalizing manhattan
+    distance as its still pretty low for puzzle size 2,3,4
     """
 
     def distance(self, puzzleSize, puzzleState, goalState):
@@ -107,6 +107,14 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
 
     # Add initial state to queue
     nodes.append(makeNode(puzzleSize, puzzleState, goalState, cost, heuristic))
+
+    # Loop for searching problem space
+    while True:
+
+        # Check for failure
+        if (len(nodes) == 0):
+            print("Failure! No solution found!")
+            break
 
 
 if __name__ == "__main__":

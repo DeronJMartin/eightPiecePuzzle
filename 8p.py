@@ -113,6 +113,75 @@ def printState(node):
     for i in puzzleState:
         print(puzzleState)
 
+# Define OPERATORS
+# The operatots are swapUp, swapRight, swapDown, swapLeft
+def swapUp(puzzleSize, puzzleState):
+    for i in range(puzzleSize):
+        for j in range(puzzleSize):
+            if (puzzleState[i][j] == 0):
+                puzzleState[i][j] == puzzleState[i-1][j]
+                puzzleState[i-1][j] == 0
+    return puzzleState
+
+def swapRight(puzzleSize, puzzleState):
+    for i in range(puzzleSize):
+        for j in range(puzzleSize):
+            if (puzzleState[i][j] == 0):
+                puzzleState[i][j] == puzzleState[i][j+1]
+                puzzleState[i][j+1] == 0
+    return puzzleState
+
+def swapDown(puzzleSize, puzzleState):
+    for i in range(puzzleSize):
+        for j in range(puzzleSize):
+            if (puzzleState[i][j] == 0):
+                puzzleState[i][j] == puzzleState[i+1][j]
+                puzzleState[i+1][j] == 0
+    return puzzleState
+
+def swapLeft(puzzleSize, puzzleState):
+    for i in range(puzzleSize):
+        for j in range(puzzleSize):
+            if (puzzleState[i][j] == 0):
+                puzzleState[i][j] == puzzleState[i][j+1]
+                puzzleState[i][j+1] == 0
+    return puzzleState
+
+# Define EXPAND function
+def expandState(nodes, node):
+    # Calculate puzzle size from puzzle state
+    puzzleState = node[0]
+    puzzleSize = len(puzzleState[0])
+    
+    # Initialize variables that indicate which operators are available
+    canSwapUp = canSwapRight = canSwapDown = canSwapLeft = True
+
+    # Find blank piece position
+    for i in range(puzzleSize):
+        for j in range(puzzleState):
+            if (puzzleState[i][j] == 0):
+                if (i == 0):
+                    canSwapUp = False
+                elif (i == puzzleState-1):
+                    canSwapDown = False
+                if (j == 0):
+                    canSwapLeft = False
+                elif (j == puzzleState-1):
+                    canSwapRight = False
+                break
+
+    # Add operator puzzle states to queue
+    if canSwapUp:
+        nodes.append(swapUp(puzzleSize, puzzleState))
+    if canSwapRight:
+        nodes.append(swapRight(puzzleSize, puzzleState))
+    if canSwapDown:
+        nodes.append(swapDown(puzzleSize, puzzleState))
+    if canSwapLeft:
+        nodes.append(swapLeft(puzzleSize, puzzleState))
+
+    return nodes
+
 # Define driver function
 def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
     
@@ -146,15 +215,17 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
             print("Failure! No solution found!")
             break
 
-        # Remove frontier node
+        # Remove frontier node and print it
         node = removeFront(nodes)
+        printState(node)
 
         # Check for success
         if (goalTest(node)):
             print("Success! Goal State found!")
-            printState(node)
             break
 
+        # Expand operators and add new states to queue
+        nodes = makeQueue(expandState(nodes, node))
 
 if __name__ == "__main__":
     print("test")

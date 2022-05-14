@@ -227,7 +227,7 @@ def expandState(nodes, node, goalState, heuristic):
 
 # Define driver function
 # Default puzzleState = [[4,8,1],[3,0,5],[7,6,2]]
-def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
+def search(puzzleSize = 3, puzzleState = [[1,2,3],[0,5,6],[4,7,8]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
 
     # Detect errors in input
     inputErrorDetection(puzzleSize, puzzleState, goalState)
@@ -315,8 +315,11 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
 
 if __name__ == "__main__":
     # Take mode input from user
-    print("Do you want to search with custom states? ")
-    mode = int(input("0: No\n1: Yes\nYour input: "))
+    # print("Do you want to search with custom states? ")
+    # mode = int(input("0: No\n1: Yes\nYour input: "))
+
+    # For data collection
+    mode = 0
 
     # Perform custom search or default search
     if mode == 0:

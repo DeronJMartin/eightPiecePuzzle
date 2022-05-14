@@ -216,8 +216,8 @@ def expandState(nodes, node, goalState, heuristic):
 
 # Define driver function
 # Default puzzleState = [[4,8,1],[3,0,5],[7,6,2]]
-def search(puzzleSize = 4, puzzleState = [[0,9,2,11],[10,1,5,7],[6,4,13,14],[12,15,8,3]], goalState = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,0]], algorithm = 3):
-    
+def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = [[1,2,3],[4,5,6],[7,8,0]], algorithm = 3):
+
     # Detect errors in input
     inputErrorDetection(puzzleSize, puzzleState, goalState)
 
@@ -262,4 +262,33 @@ def search(puzzleSize = 4, puzzleState = [[0,9,2,11],[10,1,5,7],[6,4,13,14],[12,
         nodes = makeQueue(expandState(nodes, node, goalState, heuristic))
 
 if __name__ == "__main__":
-    search()
+    # Take mode input from user
+    print("Do you want to search with custom states? ")
+    mode = int(input("0: No\n1: Yes\nYour input: "))
+
+    # Perform custom search or default search
+    if mode == 0:
+        search()
+    elif mode == 1:
+        puzzleSize = int(input("\nEnter puzzle size: "))
+
+        print("\nEnter intial state below: ")
+        puzzleState = []
+        for i in range(puzzleSize):
+            row = input("Enter row: ").split()
+            row = [int(n) for n in row]
+            puzzleState.append(row)
+
+        print("\nEnter goal state below: ")
+        goalState = []
+        for i in range(puzzleSize):
+            row = input("Enter row: ").split()
+            row = [int(n) for n in row]
+            goalState.append(row)
+
+        print("\nEnter choice of heuristic function")
+        algorithm = int(input("1: Uniform Cost Search\n2: A* with Misplaced Tile Distance\n3: A* with Manhattan Tile Distance"))
+
+        search(puzzleSize, puzzleState, goalState,algorithm)
+    else:
+        sys.exit("Incorrect input!")

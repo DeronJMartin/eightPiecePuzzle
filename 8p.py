@@ -289,13 +289,17 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
             # Stop timer
             endTime = perf_counter_ns()
             nodesInFrontier = len(nodes)
-            cpuTime = (endTime - startTime)/10**9
+            cpuTime = round((endTime - startTime)/10**9, 3)
 
             # Add data to dataframes
-            nodesExpandedData[solutionDepth] = nodesExpanded
-            maxSizeOfQueueData[solutionDepth] = maxSizeOfQueue
-            nodesInFrontierData[solutionDepth] = nodesInFrontier
-            cpuTimeData[solutionDepth] = cpuTime
+            nodesExpandedData["depth"] = [solutionDepth]
+            nodesExpandedData["nodes"] = [nodesExpanded]
+            maxSizeOfQueueData["depth"] = [solutionDepth]
+            maxSizeOfQueueData["size"] = [maxSizeOfQueue]
+            nodesInFrontierData["depth"] = [solutionDepth]
+            nodesInFrontierData["frontier"] = [nodesInFrontier]
+            cpuTimeData["depth"] = [solutionDepth]
+            cpuTimeData["time"] = [cpuTime]
 
             # Append dataframes to files
             nodesExpandedData.to_csv(folder+'nodesExpanded.csv', mode='a', index=False, header=False)

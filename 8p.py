@@ -1,5 +1,7 @@
 # Import packages
 import sys
+import pandas as pd
+from time import perf_counter_ns
 
 # Define uniform cost distance which is always zero
 class uniformCostDist:
@@ -26,7 +28,7 @@ class manhattanTileDistance:
 
     """
     I didn't bother figuring out an algorithm with less
-    time complexity than O(n^^4) for generalizing manhattan
+    time complexity than O(n**4) for generalizing manhattan
     distance as its still pretty low for puzzle size 2,3,4
     """
 
@@ -46,6 +48,14 @@ class manhattanTileDistance:
                             distance += (abs(i - ii) + abs(j - jj))
         
         return distance
+
+# Define class node
+# class node:
+#     def __init__(self, puzzleState, value, cost, distance):
+#         self.puzzleState = puzzleState
+#         self.value = value
+#         self.cost = cost
+#         self.distance = distance
 
 # Define input error detection function
 def inputErrorDetection(puzzleSize, puzzleState, goalState):
@@ -84,7 +94,7 @@ def makeNode(puzzleSize, puzzleState, goalState, cost, heuristic):
     value = cost + distance
 
     # Create node of state and f(n)
-    node = [puzzleState, value]
+    node = [puzzleState, value, cost, distance]
     return node
 
 # Define MAKE-QUEUE function
@@ -114,6 +124,7 @@ def goalTest(node, goalState):
 # Print puzzle state
 def printState(node):
     puzzleState = node[0]
+    print("\n")
     for i in puzzleState:
         print(i)
 
@@ -204,13 +215,13 @@ def expandState(nodes, node, goalState, heuristic):
 
     # Add operator puzzle states to queue
     if canSwapUp:
-        nodes.append(makeNode(puzzleSize, swapUp(puzzleSize, node), goalState, node[1] - heuristic.distance(puzzleSize, puzzleState, goalState) + 1, heuristic))
+        nodes.append(makeNode(puzzleSize, swapUp(puzzleSize, node), goalState, node[2] + 1, heuristic))
     if canSwapRight:
-        nodes.append(makeNode(puzzleSize, swapRight(puzzleSize, node), goalState, node[1] - heuristic.distance(puzzleSize, puzzleState, goalState) + 1, heuristic))
+        nodes.append(makeNode(puzzleSize, swapRight(puzzleSize, node), goalState, node[2] + 1, heuristic))
     if canSwapDown:
-        nodes.append(makeNode(puzzleSize, swapDown(puzzleSize, node), goalState, node[1] - heuristic.distance(puzzleSize, puzzleState, goalState) + 1, heuristic))
+        nodes.append(makeNode(puzzleSize, swapDown(puzzleSize, node), goalState, node[2] + 1, heuristic))
     if canSwapLeft:
-        nodes.append(makeNode(puzzleSize, swapLeft(puzzleSize, node), goalState, node[1] - heuristic.distance(puzzleSize, puzzleState, goalState) + 1, heuristic))
+        nodes.append(makeNode(puzzleSize, swapLeft(puzzleSize, node), goalState, node[2] + 1, heuristic))
 
     return nodes
 
@@ -224,12 +235,18 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
     # Inititalize heuristic to be used
     if (algorithm == 1):
         heuristic = uniformCostDist()
+        folder = "UniformCostSearchMetrics/"
     elif (algorithm == 2):
         heuristic = misplacedTileDist()
+        folder = "MisplacedTileSearchMetrics/"
     elif (algorithm == 3):
         heuristic = manhattanTileDistance()
+        folder = "ManhattanTileSearchMetrics/"
     else:
         sys.exit("Error! Incorrect input for algorithm selection!")
+
+    # Start timer
+    startTime = perf_counter_ns()
 
     # Initialize queue
     nodes = []
@@ -240,6 +257,17 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
     # Add initial state to queue
     nodes.append(makeNode(puzzleSize, puzzleState, goalState, cost, heuristic))
 
+    # Initialize dataframes and variable for data collection
+    nodesExpanded = 0
+    nodesExpandedData = pd.DataFrame()
+    maxSizeOfQueue = 1
+    maxSizeOfQueueData = pd.DataFrame()
+    nodesInFrontier = 0
+    nodesInFrontierData = pd.DataFrame()
+    cpuTime = 0
+    cpuTimeData = pd.DataFrame()
+    solutionDepth = 0
+
     # Loop for searching problem space
     while True:
 
@@ -247,14 +275,34 @@ def search(puzzleSize = 3, puzzleState = [[4,8,1],[3,0,5],[7,6,2]], goalState = 
         if (empty(nodes)):
             print("Failure! No solution found!")
             break
+        maxSizeOfQueue = max(maxSizeOfQueue, len(nodes))
 
         # Remove frontier node and print it
         node = removeFront(nodes)
+        nodesExpanded += 1
         printState(node)
-        print("f(n) = ",node[1],"\n")
+        print("f(n) = ",node[1],"\tg(n) = ",node[2],"\th(n) = ",node[3])
 
         # Check for success
         if (goalTest(node, goalState)):
+            solutionDepth = node[2]
+            # Stop timer
+            endTime = perf_counter_ns()
+            nodesInFrontier = len(nodes)
+            cpuTime = (endTime - startTime)/10**9
+
+            # Add data to dataframes
+            nodesExpandedData[solutionDepth] = nodesExpanded
+            maxSizeOfQueueData[solutionDepth] = maxSizeOfQueue
+            nodesInFrontierData[solutionDepth] = nodesInFrontier
+            cpuTimeData[solutionDepth] = cpuTime
+
+            # Append dataframes to files
+            nodesExpandedData.to_csv(folder+'nodesExpanded.csv', mode='a', index=False, header=False)
+            maxSizeOfQueueData.to_csv(folder+'maxSizeOfQueue.csv', mode='a', index=False, header=False)
+            nodesInFrontierData.to_csv(folder+'nodesInFrontier.csv', mode='a', index=False, header=False)
+            cpuTimeData.to_csv(folder+'cpuTime.csv', mode='a', index=False, header=False)
+
             print("Success! Goal State found!")
             break
 
